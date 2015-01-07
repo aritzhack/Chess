@@ -3,13 +3,11 @@ package io.github.aritzhack.chess;
 import com.google.common.collect.Sets;
 import io.github.aritzhack.aritzh.awt.render.IRender;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.Set;
 
-import static io.github.aritzhack.chess.Field.SPRITE_SIZE;
-
 /**
- * Created by Aritz on 06/01/2015.
+ * @author Aritz Lopez
  */
 public class Piece {
 
@@ -31,8 +29,7 @@ public class Piece {
     }
 
     public void render(IRender render, int x, int y) {
-        if (this.type != PieceType.NONE)
-            render.draw(x * SPRITE_SIZE, y * SPRITE_SIZE, (this.isBlack ? "n" : "") + this.type.spriteName);
+        if (this.type != PieceType.NONE) render.draw(x, y, (this.isBlack ? "n" : "") + this.type.spriteName);
     }
 
     public Set<Point[]> getPossibleMovements(int x, int y) {
@@ -64,21 +61,21 @@ public class Piece {
                     return Sets.union(ROOK.getPossibleMovements(x, y, isBlack), BISHOP.getPossibleMovements(x, y, isBlack));
                 case ROOK:
                     return Sets.newHashSet(
-                            new Point[]{p(x - 1, y), p(x - 2, y), p(x - 3, y), p(x - 4, y), p(x - 5, y), p(x - 6, y), p(x - 7, y)},
-                            new Point[]{p(x + 1, y), p(x + 2, y), p(x + 3, y), p(x + 4, y), p(x + 5, y), p(x + 6, y), p(x + 7, y)},
-                            new Point[]{p(x, y - 1), p(x, y - 2), p(x, y - 3), p(x, y - 4), p(x, y - 5), p(x, y - 6), p(x, y - 7)},
-                            new Point[]{p(x, y + 1), p(x, y + 2), p(x, y + 3), p(x, y + 4), p(x, y + 5), p(x, y + 6), p(x, y + 7)});
+                        new Point[]{p(x - 1, y), p(x - 2, y), p(x - 3, y), p(x - 4, y), p(x - 5, y), p(x - 6, y), p(x - 7, y)},
+                        new Point[]{p(x + 1, y), p(x + 2, y), p(x + 3, y), p(x + 4, y), p(x + 5, y), p(x + 6, y), p(x + 7, y)},
+                        new Point[]{p(x, y - 1), p(x, y - 2), p(x, y - 3), p(x, y - 4), p(x, y - 5), p(x, y - 6), p(x, y - 7)},
+                        new Point[]{p(x, y + 1), p(x, y + 2), p(x, y + 3), p(x, y + 4), p(x, y + 5), p(x, y + 6), p(x, y + 7)});
                 case KNIGHT:
                     return Sets.newHashSet(
-                            new Point[]{p(x - 2, y - 1)}, new Point[]{p(x - 1, y - 2)}, new Point[]{p(x + 1, y - 2)}, new Point[]{p(x + 2, y - 1)},
-                            new Point[]{p(x - 2, y + 1)}, new Point[]{p(x - 1, y + 2)}, new Point[]{p(x + 1, y + 2)}, new Point[]{p(x + 2, y + 1)}
+                        new Point[]{p(x - 2, y - 1)}, new Point[]{p(x - 1, y - 2)}, new Point[]{p(x + 1, y - 2)}, new Point[]{p(x + 2, y - 1)},
+                        new Point[]{p(x - 2, y + 1)}, new Point[]{p(x - 1, y + 2)}, new Point[]{p(x + 1, y + 2)}, new Point[]{p(x + 2, y + 1)}
                     );
                 case BISHOP:
                     return Sets.newHashSet(
-                            new Point[]{p(x - 1, y - 1), p(x - 2, y - 2), p(x - 3, y - 3), p(x - 4, y - 4), p(x - 5, y - 5), p(x - 6, y - 6), p(x - 7, y - 7)},
-                            new Point[]{p(x + 1, y + 1), p(x + 2, y + 2), p(x + 3, y + 3), p(x + 4, y + 4), p(x + 5, y + 5), p(x + 6, y + 6), p(x + 7, y + 7)},
-                            new Point[]{p(x + 1, y - 1), p(x + 2, y - 2), p(x + 3, y - 3), p(x + 4, y - 4), p(x + 5, y - 5), p(x + 6, y - 6), p(x + 7, y - 7)},
-                            new Point[]{p(x - 1, y + 1), p(x - 2, y + 2), p(x - 3, y + 3), p(x - 4, y + 4), p(x - 5, y + 5), p(x - 6, y + 6), p(x - 7, y + 7)}
+                        new Point[]{p(x - 1, y - 1), p(x - 2, y - 2), p(x - 3, y - 3), p(x - 4, y - 4), p(x - 5, y - 5), p(x - 6, y - 6), p(x - 7, y - 7)},
+                        new Point[]{p(x + 1, y + 1), p(x + 2, y + 2), p(x + 3, y + 3), p(x + 4, y + 4), p(x + 5, y + 5), p(x + 6, y + 6), p(x + 7, y + 7)},
+                        new Point[]{p(x + 1, y - 1), p(x + 2, y - 2), p(x + 3, y - 3), p(x + 4, y - 4), p(x + 5, y - 5), p(x + 6, y - 6), p(x + 7, y - 7)},
+                        new Point[]{p(x - 1, y + 1), p(x - 2, y + 2), p(x - 3, y + 3), p(x - 4, y + 4), p(x - 5, y + 5), p(x - 6, y + 6), p(x - 7, y + 7)}
                     );
                 case PAWN:
                     if (isBlack && y == 1) {
