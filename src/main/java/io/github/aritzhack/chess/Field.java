@@ -36,6 +36,7 @@ public class Field {
     private final Queue<Piece> grave = Queues.newArrayDeque();
 
     public static final int Y_OFFSET = SPRITE_SIZE;
+    private boolean shouldTitleChange = true;
 
     public Field() {
         for (int y = 0; y < height; y++) {
@@ -181,6 +182,18 @@ public class Field {
         this.pieces[from.x][from.y] = new Piece(NONE, false);
         this.pieces[to.x][to.y] = t;
         this.blacksTurn = !this.blacksTurn;
+        shouldTitleChange = true;
     }
 
+    public boolean isBlacksTurn() {
+        return blacksTurn;
+    }
+
+    public boolean shouldTitleChange() {
+        if(shouldTitleChange) {
+            shouldTitleChange = false;
+            return true;
+        }
+        return false;
+    }
 }
