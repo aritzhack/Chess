@@ -19,6 +19,7 @@ public class Field {
     private boolean blacksTurn = false;
 
     public static final int SPRITE_SIZE = 64;
+    private static final int GRAVE_SIZE = 2*SPRITE_SIZE;
     private final int width = 8, height = 8;
     private final Sprite light_gray = new Sprite(SPRITE_SIZE, SPRITE_SIZE, 0xFFAAAAAA);
     private final Sprite dark_gray = new Sprite(SPRITE_SIZE, SPRITE_SIZE, 0xFF444444);
@@ -34,8 +35,6 @@ public class Field {
     private Point sel = null;
 
     private final Queue<Piece> grave = Queues.newArrayDeque();
-
-    public static final int Y_OFFSET = SPRITE_SIZE;
 
     public Field() {
         for (int y = 0; y < height; y++) {
@@ -57,10 +56,10 @@ public class Field {
         pieces[1][7] = new Piece(KNIGHT, false);
         pieces[2][0] = new Piece(BISHOP, true);
         pieces[2][7] = new Piece(BISHOP, false);
-        pieces[3][0] = new Piece(QUEEN, true);
-        pieces[3][7] = new Piece(KING, false);
-        pieces[4][0] = new Piece(KING, true);
-        pieces[4][7] = new Piece(QUEEN, false);
+        pieces[3][0] = new Piece(KING, true);
+        pieces[3][7] = new Piece(QUEEN, false);
+        pieces[4][0] = new Piece(QUEEN, true);
+        pieces[4][7] = new Piece(KING, false);
         pieces[5][0] = new Piece(BISHOP, true);
         pieces[5][7] = new Piece(BISHOP, false);
         pieces[6][0] = new Piece(KNIGHT, true);
@@ -72,12 +71,12 @@ public class Field {
     public void render(IRender render) {
 
         render.draw(0, 0, top_grave);
-        render.draw(0, SPRITE_SIZE + SPRITE_SIZE * height, bottom_grave);
+        render.draw(0, GRAVE_SIZE + SPRITE_SIZE * height, bottom_grave);
 
         int b = 0, w = 0;
         for (Piece p : grave) {
             if (p.isBlack()) {
-                p.render(render, b * SPRITE_SIZE, height * SPRITE_SIZE + Y_OFFSET);
+                p.render(render, b * SPRITE_SIZE, height * SPRITE_SIZE + GRAVE_SIZE);
                 b++;
             } else {
                 p.render(render, w * SPRITE_SIZE, 0);
@@ -87,23 +86,23 @@ public class Field {
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                render.draw(x * SPRITE_SIZE, Y_OFFSET + y * SPRITE_SIZE, (((x + y) % 2) == 0 ? light_gray : dark_gray));
+                render.draw(x * SPRITE_SIZE, GRAVE_SIZE + y * SPRITE_SIZE, (((x + y) % 2) == 0 ? light_gray : dark_gray));
             }
         }
 
         if (this.sel != null) {
-            render.draw(sel.x * SPRITE_SIZE, Y_OFFSET + sel.y * SPRITE_SIZE, (((sel.x + sel.y) % 2) == 0 ? dark_yellow : light_yellow));
+            render.draw(sel.x * SPRITE_SIZE, GRAVE_SIZE + sel.y * SPRITE_SIZE, (((sel.x + sel.y) % 2) == 0 ? dark_yellow : light_yellow));
             for (Point p : this.pieces[this.sel.x][this.sel.y].getMovements()) {
                 if (this.pieces[p.x][p.y].getType() == NONE)
-                    render.draw(p.x * SPRITE_SIZE, Y_OFFSET + p.y * SPRITE_SIZE, (((p.x + p.y) % 2) == 0 ? dark_yellow : light_yellow));
+                    render.draw(p.x * SPRITE_SIZE, GRAVE_SIZE + p.y * SPRITE_SIZE, (((p.x + p.y) % 2) == 0 ? dark_yellow : light_yellow));
                 else
-                    render.draw(p.x * SPRITE_SIZE, Y_OFFSET + p.y * SPRITE_SIZE, (((p.x + p.y) % 2) == 0 ? dark_red : light_red));
+                    render.draw(p.x * SPRITE_SIZE, GRAVE_SIZE + p.y * SPRITE_SIZE, (((p.x + p.y) % 2) == 0 ? dark_red : light_red));
             }
         }
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                pieces[x][y].render(render, x * SPRITE_SIZE, y * SPRITE_SIZE + Y_OFFSET);
+                pieces[x][y].render(render, x * SPRITE_SIZE, y * SPRITE_SIZE + GRAVE_SIZE);
             }
         }
     }

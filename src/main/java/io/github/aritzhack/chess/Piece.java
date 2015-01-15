@@ -56,26 +56,29 @@ public class Piece {
         public Set<Point[]> getPossibleMovements(int x, int y, boolean isBlack) {
             switch (this) {
                 case KING:
-                    return Sets.newHashSet(new Point[]{p(x, y - 1)}, new Point[]{p(x - 1, y)}, new Point[]{p(x + 1, y)}, new Point[]{p(x, y + 1)});
+                    return Sets.newHashSet(
+                            new Point[]{p(x, y - 1)}, new Point[]{p(x - 1, y)}, new Point[]{p(x + 1, y)}, new Point[]{p(x, y + 1)},
+                            new Point[]{p(x - 1, y - 1)}, new Point[]{p(x - 1, y + 1)}, new Point[]{p(x + 1, y - 1)}, new Point[]{p(x + 1, y + 1)}
+                    );
                 case QUEEN:
                     return Sets.union(ROOK.getPossibleMovements(x, y, isBlack), BISHOP.getPossibleMovements(x, y, isBlack));
                 case ROOK:
                     return Sets.newHashSet(
-                        new Point[]{p(x - 1, y), p(x - 2, y), p(x - 3, y), p(x - 4, y), p(x - 5, y), p(x - 6, y), p(x - 7, y)},
-                        new Point[]{p(x + 1, y), p(x + 2, y), p(x + 3, y), p(x + 4, y), p(x + 5, y), p(x + 6, y), p(x + 7, y)},
-                        new Point[]{p(x, y - 1), p(x, y - 2), p(x, y - 3), p(x, y - 4), p(x, y - 5), p(x, y - 6), p(x, y - 7)},
-                        new Point[]{p(x, y + 1), p(x, y + 2), p(x, y + 3), p(x, y + 4), p(x, y + 5), p(x, y + 6), p(x, y + 7)});
+                            new Point[]{p(x - 1, y), p(x - 2, y), p(x - 3, y), p(x - 4, y), p(x - 5, y), p(x - 6, y), p(x - 7, y)},
+                            new Point[]{p(x + 1, y), p(x + 2, y), p(x + 3, y), p(x + 4, y), p(x + 5, y), p(x + 6, y), p(x + 7, y)},
+                            new Point[]{p(x, y - 1), p(x, y - 2), p(x, y - 3), p(x, y - 4), p(x, y - 5), p(x, y - 6), p(x, y - 7)},
+                            new Point[]{p(x, y + 1), p(x, y + 2), p(x, y + 3), p(x, y + 4), p(x, y + 5), p(x, y + 6), p(x, y + 7)});
                 case KNIGHT:
                     return Sets.newHashSet(
-                        new Point[]{p(x - 2, y - 1)}, new Point[]{p(x - 1, y - 2)}, new Point[]{p(x + 1, y - 2)}, new Point[]{p(x + 2, y - 1)},
-                        new Point[]{p(x - 2, y + 1)}, new Point[]{p(x - 1, y + 2)}, new Point[]{p(x + 1, y + 2)}, new Point[]{p(x + 2, y + 1)}
+                            new Point[]{p(x - 2, y - 1)}, new Point[]{p(x - 1, y - 2)}, new Point[]{p(x + 1, y - 2)}, new Point[]{p(x + 2, y - 1)},
+                            new Point[]{p(x - 2, y + 1)}, new Point[]{p(x - 1, y + 2)}, new Point[]{p(x + 1, y + 2)}, new Point[]{p(x + 2, y + 1)}
                     );
                 case BISHOP:
                     return Sets.newHashSet(
-                        new Point[]{p(x - 1, y - 1), p(x - 2, y - 2), p(x - 3, y - 3), p(x - 4, y - 4), p(x - 5, y - 5), p(x - 6, y - 6), p(x - 7, y - 7)},
-                        new Point[]{p(x + 1, y + 1), p(x + 2, y + 2), p(x + 3, y + 3), p(x + 4, y + 4), p(x + 5, y + 5), p(x + 6, y + 6), p(x + 7, y + 7)},
-                        new Point[]{p(x + 1, y - 1), p(x + 2, y - 2), p(x + 3, y - 3), p(x + 4, y - 4), p(x + 5, y - 5), p(x + 6, y - 6), p(x + 7, y - 7)},
-                        new Point[]{p(x - 1, y + 1), p(x - 2, y + 2), p(x - 3, y + 3), p(x - 4, y + 4), p(x - 5, y + 5), p(x - 6, y + 6), p(x - 7, y + 7)}
+                            new Point[]{p(x - 1, y - 1), p(x - 2, y - 2), p(x - 3, y - 3), p(x - 4, y - 4), p(x - 5, y - 5), p(x - 6, y - 6), p(x - 7, y - 7)},
+                            new Point[]{p(x + 1, y + 1), p(x + 2, y + 2), p(x + 3, y + 3), p(x + 4, y + 4), p(x + 5, y + 5), p(x + 6, y + 6), p(x + 7, y + 7)},
+                            new Point[]{p(x + 1, y - 1), p(x + 2, y - 2), p(x + 3, y - 3), p(x + 4, y - 4), p(x + 5, y - 5), p(x + 6, y - 6), p(x + 7, y - 7)},
+                            new Point[]{p(x - 1, y + 1), p(x - 2, y + 2), p(x - 3, y + 3), p(x - 4, y + 4), p(x - 5, y + 5), p(x - 6, y + 6), p(x - 7, y + 7)}
                     );
                 case PAWN:
                     if (isBlack && y == 1) {

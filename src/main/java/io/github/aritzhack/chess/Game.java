@@ -24,7 +24,7 @@ public class Game extends AbstractGame {
     public Game() {
         this.field = new Field();
         this.field.initField();
-        this.testEngine = new TestEngine(this, 512, 640, LOG, sprites);
+        this.testEngine = new TestEngine(this, 512, 768, LOG, sprites);
     }
 
     @Override
