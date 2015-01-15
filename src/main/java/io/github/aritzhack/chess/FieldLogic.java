@@ -1,8 +1,11 @@
 package io.github.aritzhack.chess;
 
+import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 
 import java.awt.Point;
+import java.util.Iterator;
+import java.util.Queue;
 import java.util.Set;
 
 import static io.github.aritzhack.chess.Piece.PieceType.*;
@@ -12,13 +15,19 @@ import static io.github.aritzhack.chess.Piece.PieceType.*;
  */
 public class FieldLogic {
 
-    private final int width = 8, height = 8;
+    public static final int width = 8, height = 8;
     private final Piece[][] pieces = new Piece[width][height];
     private boolean blacksTurn = false;
     private boolean whiteKingChecked, blackKingChecked;
+    private final Queue<Piece> grave = Queues.newArrayDeque();
+    private boolean shouldTitleChange = true;
 
     public void setPiece(int x, int y, Piece.PieceType piece, boolean isBlack) {
-        if (inBounds(x, y)) this.pieces[x][y] = new Piece(piece, isBlack);
+        this.setPiece(x, y, new Piece(piece, isBlack));
+    }
+
+    public void setPiece(int x, int y, Piece piece) {
+        if (inBounds(x, y)) this.pieces[x][y] = piece;
     }
 
     public void setBlacksTurn(boolean blacksTurn) {
@@ -35,7 +44,6 @@ public class FieldLogic {
             for (int x = 0; x < width; x++) {
                 Set<Point> points = Sets.newHashSet();
                 Piece piece = this.pieces[x][y];
-                if (piece.isBlack() != blacksTurn) continue;
                 A:
                 for (Point[] ps : piece.getPossibleMovements(x, y)) {
                     for (Point p : ps) {
@@ -58,15 +66,43 @@ public class FieldLogic {
                     }
                 }
                 for (Point p : points) {
-                    if (this.pieces[p.x][p.y].getType() == KING) {
+                    if (this.pieces[p.x][p.y].is(KING, !this.blacksTurn)) {
                         noneChecked = false;
                     }
                 }
                 piece.setMovements(points);
             }
         }
-        whiteKingChecked = !noneChecked && blacksTurn;
-        blackKingChecked = !noneChecked && !blacksTurn;
+
+        whiteKingChecked = !noneChecked && !blacksTurn;
+        blackKingChecked = !noneChecked && blacksTurn;
+
+        if (this.blacksTurn ? blackKingChecked : whiteKingChecked) {
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    Point from = new Point(x, y);
+                    Iterator<Point> iter = this.pieces[x][y].getMovements().iterator();
+                    while (iter.hasNext()) {
+                        Point to = iter.next();
+                        if (this.isMovementChecked(from, to)) {
+                            iter.remove();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void move(Point from, Point to) {
+        Piece t = this.pieces[from.x][from.y];
+
+        if (isPiece(to.x, to.y)) grave.add(this.pieces[to.x][to.y]);
+
+        this.pieces[from.x][from.y] = new Piece(NONE, false);
+        this.pieces[to.x][to.y] = t;
+        this.blacksTurn = !this.blacksTurn;
+        shouldTitleChange = true;
+        System.out.println("Moved!");
     }
 
     public boolean isBlackKingChecked() {
@@ -77,15 +113,41 @@ public class FieldLogic {
         return whiteKingChecked;
     }
 
-    private boolean isPiece(int x, int y) {
+    public boolean isPiece(int x, int y) {
         return inBounds(x, y) && this.pieces[x][y].getType() != NONE;
     }
 
-    private boolean isBlack(int x, int y) {
+    public boolean isBlack(int x, int y) {
         return isPiece(x, y) && this.pieces[x][y].isBlack();
     }
 
-    private boolean inBounds(int x, int y) {
+    public boolean inBounds(int x, int y) {
         return x >= 0 && x < width && y >= 0 && y < height;
+    }
+
+    private FieldLogic getMovementField(Point from, Point to) {
+        FieldLogic fl = new FieldLogic();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                fl.setPiece(x, y, this.pieces[x][y].getType(), this.pieces[x][y].isBlack());
+            }
+        }
+        fl.move(from, to);
+
+        fl.calculateMovements(false);
+        return fl;
+    }
+
+    private boolean isMovementChecked(Point from, Point to) {
+        FieldLogic fl = getMovementField(from, to);
+        return this.blacksTurn ? fl.isBlackKingChecked() : fl.isWhiteKingChecked();
+    }
+
+    public Queue<Piece> getGrave() {
+        return grave;
+    }
+
+    public Piece getPiece(int x, int y) {
+        return inBounds(x,y) ? this.pieces[x][y] : null;
     }
 }

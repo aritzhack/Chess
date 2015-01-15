@@ -24,6 +24,10 @@ public class Piece {
         return type;
     }
 
+    public boolean is(PieceType type, boolean isBlack) {
+        return this.type == type && this.isBlack == isBlack;
+    }
+
     public boolean isBlack() {
         return isBlack;
     }
