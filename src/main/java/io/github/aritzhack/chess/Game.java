@@ -51,5 +51,7 @@ public class Game extends AbstractGame {
                 this.field.clicked(e.getPosition());
             }
         }
+        if(this.field.shouldTitleChange())
+            this.testEngine.getEngine().setTitle(this.getGameName() + " - " + (this.field.isBlacksTurn()?"Black":"White") + "s' turn");
     }
 }
